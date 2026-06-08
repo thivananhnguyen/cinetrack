@@ -1,5 +1,4 @@
-// src/app/track-list/track-list.ts
-import { Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { TrackCard } from '../track-card/track-card';
 import { Track } from '../models/track';
 
@@ -7,6 +6,8 @@ import { Track } from '../models/track';
   selector: 'app-track-list',
   imports: [TrackCard],
   templateUrl: './track-list.html',
+  styleUrl: './track-list.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackList {
   tracks = input.required<Track[]>();
