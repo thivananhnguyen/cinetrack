@@ -1,0 +1,11 @@
+<!-- src/app/track-list/track-list.html -->
+<section class="grid">
+    @for (track of tracks(); track track.id) {
+    <app-track-card
+        [track]="track"
+        [active]="track.id === selectedId()"
+        (select)="selectedId.set($event.id)" />
+    } @empty {
+    <p>Aucun morceau.</p>
+    }
+</section>

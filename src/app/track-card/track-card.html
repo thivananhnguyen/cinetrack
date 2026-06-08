@@ -1,0 +1,9 @@
+<!-- src/app/track-card/track-card.html -->
+<article class="card" [class.active]="active()" (click)="select.emit(track())">
+  <img [src]="track().coverUrl" [alt]="track().title" />
+  <h3>{{ track().title }}</h3>
+  <p>{{ track().artist }}</p>
+  @if (active()) {
+    <span class="badge">▶ En lecture</span>
+  }
+</article>
