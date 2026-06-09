@@ -4,7 +4,7 @@
 </header>
 
 <main class="content">
-  <app-track-form (addTrack)="onAddTrack($event)" />
+  <app-track-form [existingTracks]="tracks()" (addTrack)="onAddTrack($event)" />
   <app-track-list [tracks]="tracks()" />
 </main>
 

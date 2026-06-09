@@ -2,6 +2,12 @@
 <form class="track-form" novalidate (submit)="onSubmit($event)">
   <h2>Ajouter un morceau</h2>
 
+  @if (duplicateError()) {
+    <div class="duplicate-error">
+      ⚠ Ce morceau existe déjà dans la liste !
+    </div>
+  }
+
   <div class="field">
     <label for="title">Titre</label>
     <input id="title" [formField]="trackForm.title" placeholder="Ex: Blinding Lights" />
