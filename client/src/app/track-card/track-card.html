@@ -2,7 +2,7 @@
 <article
   class="card"
   [class.active]="active()"
-  (click)="select.emit(track())"
+  [routerLink]="['/tracks', track().id]"
   [appHighlightFavorite]="active() ? (track().favorite ? 'favorite' : (track().rating >= 7 ? 'recommended' : 'none')) : 'none'">
   <img [src]="track().coverUrl" [alt]="track().title" />
   <h3>{{ track().title }}</h3>

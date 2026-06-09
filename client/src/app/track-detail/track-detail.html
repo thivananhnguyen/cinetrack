@@ -1,1 +1,31 @@
-<p>track-detail works!</p>
+<!-- track-detail.html -->
+@if (track(); as t) {
+<div class="detail">
+  <a class="back" routerLink="/">← Retour</a>
+
+  <div class="detail-layout">
+    <img class="cover" [src]="t.coverUrl" [alt]="t.title" />
+
+    <div class="info">
+      <h2>{{ t.title }}</h2>
+      <p class="artist">{{ t.artist }}</p>
+      <p class="album">{{ t.album }} ({{ t.year }})</p>
+      <p class="genre">{{ t.genre }}</p>
+      <p class="duration">Durée : {{ t.durationSeconds | durationFormat }}</p>
+
+      <div class="rating">
+        @for (star of [1,2,3,4,5,6,7,8,9,10]; track star) {
+          <span [class.filled]="star <= t.rating">★</span>
+        }
+        <span class="rating-value">{{ t.rating }}/10</span>
+      </div>
+
+      @if (t.favorite) {
+        <span class="fav-badge">⭐ Favori</span>
+      }
+    </div>
+  </div>
+</div>
+} @else {
+  <div class="loading">Chargement…</div>
+}

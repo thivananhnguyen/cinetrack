@@ -1,0 +1,118 @@
+.detail {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6366f1;
+  text-decoration: none;
+  transition: color 200ms;
+}
+
+.back:hover {
+  color: #4f46e5;
+}
+
+.detail-layout {
+  display: flex;
+  gap: 2rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 5%);
+}
+
+.cover {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  flex-shrink: 0;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.info .artist {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.info .album,
+.info .genre,
+.info .duration {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.15rem;
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: #cbd5e1;
+}
+
+.rating .filled {
+  color: #f59e0b;
+}
+
+.rating-value {
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+.fav-badge {
+  display: inline-flex;
+  width: fit-content;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #92400e;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+}
+
+.loading {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1rem;
+  color: #94a3b8;
+}
+
+@media (max-width: 640px) {
+  .detail-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cover {
+    width: 100%;
+    height: auto;
+    max-width: 320px;
+  }
+}

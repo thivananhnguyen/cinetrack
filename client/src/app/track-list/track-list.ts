@@ -1,16 +1,23 @@
-import { ChangeDetectionStrategy, Component, input, signal, computed  } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackCard } from '../track-card/track-card';
+import { TrackForm } from '../track-form/track-form';
+import { TrackService } from '../services/track';
 import { Track } from '../models/track';
 
 @Component({
   selector: 'app-track-list',
-  imports: [TrackCard],
+  imports: [TrackCard, TrackForm],
   templateUrl: './track-list.html',
   styleUrl: './track-list.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackList {
-  tracks = input.required<Track[]>();
+  private trackService = inject(TrackService);
+
+  protected tracks = toSignal(this.trackService.getTracks(), {
+    initialValue: [] as Track[],
+  });
   protected selectedId = signal<number | null>(null);
   protected searchTerm = signal('');
 
