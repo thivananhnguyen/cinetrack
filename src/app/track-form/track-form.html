@@ -1,1 +1,27 @@
-<p>track-form works!</p>
+<!-- track-form.html -->
+<form class="track-form" novalidate (submit)="onSubmit($event)">
+  <h2>Ajouter un morceau</h2>
+
+  <div class="field">
+    <label for="title">Titre</label>
+    <input id="title" [formField]="trackForm.title" placeholder="Ex: Blinding Lights" />
+    @if (trackForm.title().touched() && !trackForm.title().valid()) {
+      <small class="error">{{ trackForm.title().errors()[0]?.message }}</small>
+    }
+  </div>
+
+  <div class="field">
+    <label for="artist">Artiste</label>
+    <input id="artist" [formField]="trackForm.artist" placeholder="Ex: The Weeknd" />
+    @if (trackForm.artist().touched() && !trackForm.artist().valid()) {
+      <small class="error">{{ trackForm.artist().errors()[0]?.message }}</small>
+    }
+  </div>
+
+  <div class="field">
+    <label for="rating">Note (0–10)</label>
+    <input id="rating" type="number" [formField]="trackForm.rating" />
+  </div>
+
+  <button type="submit" [disabled]="!trackForm().valid()">Enregistrer</button>
+</form>

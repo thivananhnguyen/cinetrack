@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { TrackList } from './track-list/track-list';
+import { TrackForm } from './track-form/track-form';
 import { Track } from './models/track';
 
 @Component({
   selector: 'app-root',
-  imports: [TrackList],
+  imports: [TrackList, TrackForm],
   templateUrl: './app.html',
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,4 +43,8 @@ export class App {
       favorite: false, coverUrl: 'https://picsum.photos/seed/6/300',
     },
   ]);
+
+  protected onAddTrack(track: Track) {
+    this.tracks.update(list => [...list, track]);
+  }
 }

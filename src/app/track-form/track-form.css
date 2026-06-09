@@ -1,0 +1,144 @@
+.track-form {
+  background: linear-gradient(145deg, #ffffff, #f8fafc);
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 28rem;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 5%);
+}
+
+.track-form h2 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.track-form h2::before {
+  content: '🎶';
+  font-size: 1.2rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field input[type='text'],
+.field input[type='number'],
+.field input:not([type]) {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  border: 2px solid #e2e8f0;
+  border-radius: 0.6rem;
+  background: #fff;
+  color: #1e293b;
+  outline: none;
+  transition: all 200ms ease;
+}
+
+.field input::placeholder {
+  color: #cbd5e1;
+}
+
+.field input:hover {
+  border-color: #cbd5e1;
+}
+
+.field input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgb(99 102 241 / 10%);
+}
+
+.error {
+  color: #ef4444;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.error::before {
+  content: '⚠';
+  font-size: 0.8rem;
+}
+
+button[type='submit'] {
+  margin-top: 0.5rem;
+  padding: 0.75rem 2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #fff;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  transition: all 250ms ease;
+  box-shadow: 0 4px 14px rgb(99 102 241 / 25%);
+}
+
+button[type='submit']:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgb(99 102 241 / 35%);
+}
+
+button[type='submit']:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+button[type='submit']:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.cover-preview {
+  margin-top: 0.5rem;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 2px solid #e2e8f0;
+}
+
+.cover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 480px) {
+  .track-form {
+    padding: 1.25rem;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    box-shadow: none;
+    max-width: 100%;
+  }
+
+  button[type='submit'] {
+    align-self: stretch;
+    text-align: center;
+  }
+}
