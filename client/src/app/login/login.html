@@ -1,1 +1,40 @@
-<p>login works!</p>
+<div class="login-page">
+  <form class="login-form" novalidate (submit)="onSubmit($event)">
+    <h2>🔐 Connexion</h2>
+
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="demo&#64;ipssi.fr"
+        [value]="email()"
+        (input)="email.set($any($event.target).value)" />
+      @if (emailInvalid()) {
+        <small class="error">Format d'email invalide.</small>
+      }
+    </div>
+
+    <div class="field">
+      <label for="password">Mot de passe</label>
+      <input
+        id="password"
+        type="password"
+        placeholder="••••••••"
+        [value]="password()"
+        (input)="password.set($any($event.target).value)" />
+    </div>
+
+    <button type="submit" [disabled]="loading() || !email() || !password() || emailInvalid()">
+      @if (loading()) {
+        Connexion…
+      } @else {
+        Se connecter
+      }
+    </button>
+  </form>
+</div>

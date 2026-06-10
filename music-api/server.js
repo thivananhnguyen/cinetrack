@@ -8,13 +8,19 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 
+require('dotenv').config();
+
 const { db, init } = require('./src/db');
 const { signToken, authRequired } = require('./src/auth');
 
 init();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(express.json());
 
 // Optional artificial latency to practice "loading" states: API_DELAY=500 npm start

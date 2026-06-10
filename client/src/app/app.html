@@ -4,6 +4,11 @@
   <nav class="nav">
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🏠 Accueil</a>
     <a routerLink="/search" routerLinkActive="active">🔍 Recherche</a>
+    @if (auth.isLoggedIn()) {
+      <button class="nav-btn logout" (click)="auth.logout()">🚪 Déconnexion</button>
+    } @else {
+      <a routerLink="/login" routerLinkActive="active">🔐 Connexion</a>
+    }
   </nav>
 </header>
 

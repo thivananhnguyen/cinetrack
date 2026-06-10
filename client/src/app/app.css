@@ -49,3 +49,23 @@
   color: #6366f1;
   background: #e0e7ff;
 }
+
+.nav-btn {
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: all 200ms;
+}
+
+.nav-btn.logout {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+.nav-btn.logout:hover {
+  background: #fee2e2;
+}
