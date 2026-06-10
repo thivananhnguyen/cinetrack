@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { form, FormField, required, min, max, pattern, minLength, maxLength } from '@angular/forms/signals';
 import { Track } from '../models/track';
@@ -16,7 +16,6 @@ const SAFE_TEXT = /^[\p{L}\p{N}\s'\-&.,:!?]+$/u;
 })
 export class TrackForm {
   trackId = input<number>();
-  saved = output<void>();
 
   private trackService = inject(TrackService);
   private router = inject(Router);
@@ -98,11 +97,7 @@ export class TrackForm {
       };
 
       this.trackService.create(payload).subscribe({
-        next: () => {
-          this.saving.set(false);
-          this.model.set({ title: '', artist: '', rating: 5 });
-          this.saved.emit();
-        },
+        next: () => this.router.navigate(['/']),
         error: (err) => {
           this.saving.set(false);
           this.serverError.set(

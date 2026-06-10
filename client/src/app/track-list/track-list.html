@@ -1,24 +1,32 @@
 <!-- src/app/track-list/track-list.html -->
-<app-track-form (saved)="loadTracks()" />
-
 <div class="search-wrapper">
   <span class="search-icon">🔍</span>
   <input
     type="search"
-    placeholder="Rechercher un titre ou un artiste…"
+    placeholder="Rechercher un titre, artiste, album…"
     [value]="searchTerm()"
     (input)="searchTerm.set($any($event.target).value)" />
 </div>
 
-<section class="grid">
-  @for (track of filteredTracks(); track track.id) {
-    <app-track-card
-    [track]="track"
-    [active]="track.id === selectedId()"
-    (select)="selectedId.set($event.id)" />
-  } @empty {
-    <p class="empty">Aucun résultat pour « {{ searchTerm() }} ».</p>
+@switch (state().status) {
+  @case ('loading') {
+    <p class="hint">Chargement…</p>
   }
-</section>
+  @case ('error') {
+    <div class="error-state">⚠ Erreur lors du chargement. Veuillez réessayer.</div>
+  }
+  @case ('loaded') {
+    <section class="grid">
+      @for (track of $any(state()).tracks; track track.id) {
+        <app-track-card
+        [track]="track"
+        [active]="track.id === selectedId()"
+        (select)="selectedId.set($event.id)" />
+      } @empty {
+        <p class="empty">Aucun résultat pour « {{ searchTerm() }} ».</p>
+      }
+    </section>
+  }
+}
 
 

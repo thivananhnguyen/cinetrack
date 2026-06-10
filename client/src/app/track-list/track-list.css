@@ -43,6 +43,21 @@ input[type='search']::placeholder {
   grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
 }
 
+/* Loading / hint */
+.hint {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+}
+
+.error-state {
+  text-align: center;
+  color: #ef4444;
+  font-size: 0.95rem;
+  padding: 2rem 0;
+}
+
 /* Empty state */
 .empty {
   grid-column: 1 / -1;

@@ -5,6 +5,7 @@
     <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🏠 Accueil</a>
     <a routerLink="/search" routerLinkActive="active">🔍 Recherche</a>
     @if (auth.isLoggedIn()) {
+      <a routerLink="/tracks/new" routerLinkActive="active">➕ Ajouter</a>
       <button class="nav-btn logout" (click)="auth.logout()">🚪 Déconnexion</button>
     } @else {
       <a routerLink="/login" routerLinkActive="active">🔐 Connexion</a>
