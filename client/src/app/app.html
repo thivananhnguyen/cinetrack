@@ -1,6 +1,10 @@
 <header class="header">
   <h1><a routerLink="/">🎵 CinéTrack</a></h1>
   <p class="subtitle">Your music collection</p>
+  <nav class="nav">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🏠 Accueil</a>
+    <a routerLink="/search" routerLinkActive="active">🔍 Recherche</a>
+  </nav>
 </header>
 
 <main class="content">

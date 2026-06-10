@@ -22,3 +22,30 @@
   font-size: 0.95rem;
   margin-top: 0.25rem;
 }
+
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.nav a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+  text-decoration: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  transition: all 200ms;
+}
+
+.nav a:hover {
+  color: #6366f1;
+  background: #eef2ff;
+}
+
+.nav a.active {
+  color: #6366f1;
+  background: #e0e7ff;
+}

@@ -1,1 +1,23 @@
-<p>track-search works!</p>
+<!-- track-search.html -->
+<h2>🔍 Recherche côté serveur</h2>
+
+<div class="search-wrapper">
+  <span class="search-icon">🔍</span>
+  <input
+    type="search"
+    placeholder="Rechercher un titre, artiste, album…"
+    [value]="searchTerm()"
+    (input)="searchTerm.set($any($event.target).value)" />
+</div>
+
+@if (searchTerm().trim().length < 2) {
+  <p class="hint">Tapez au moins 2 caractères pour lancer la recherche.</p>
+} @else {
+  <section class="grid">
+    @for (track of results(); track track.id) {
+      <app-track-card [track]="track" />
+    } @empty {
+      <p class="empty">Aucun résultat pour « {{ searchTerm() }} ».</p>
+    }
+  </section>
+}
