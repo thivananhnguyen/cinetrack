@@ -58,3 +58,14 @@ input[type='search']:focus {
   font-size: 0.95rem;
   padding: 2rem 0;
 }
+
+.error-state {
+  text-align: center;
+  padding: 1.5rem;
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fca5a5;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}

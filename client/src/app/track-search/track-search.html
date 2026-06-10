@@ -10,14 +10,24 @@
     (input)="searchTerm.set($any($event.target).value)" />
 </div>
 
-@if (searchTerm().trim().length < 2) {
-  <p class="hint">Tapez au moins 2 caractères pour lancer la recherche.</p>
-} @else {
-  <section class="grid">
-    @for (track of results(); track track.id) {
-      <app-track-card [track]="track" />
-    } @empty {
-      <p class="empty">Aucun résultat pour « {{ searchTerm() }} ».</p>
-    }
-  </section>
+@switch (state().status) {
+  @case ('idle') {
+    <p class="hint">Tapez au moins 2 caractères pour lancer la recherche.</p>
+  }
+  @case ('loading') {
+    <p class="hint">Recherche en cours…</p>
+  }
+  @case ('error') {
+    <div class="error-state">⚠ Erreur lors de la recherche. Veuillez réessayer.</div>
+  }
+  @case ('loaded') {
+    @let results = $any(state()).results;
+    <section class="grid">
+      @for (track of results; track track.id) {
+        <app-track-card [track]="track" />
+      } @empty {
+        <p class="empty">Aucun résultat pour « {{ searchTerm() }} ».</p>
+      }
+    </section>
+  }
 }

@@ -1,8 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { debounceTime, distinctUntilChanged, filter, switchMap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, switchMap, map, catchError, of, startWith } from 'rxjs';
 import { TrackService } from '../services/track';
 import { TrackCard } from '../track-card/track-card';
+import { Track } from '../models/track';
+
+type SearchState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'loaded'; results: Track[] }
+  | { status: 'error'; error: unknown };
 
 @Component({
   selector: 'app-track-search',
@@ -16,13 +23,19 @@ export class TrackSearch {
 
   protected searchTerm = signal('');
 
-  protected results = toSignal(
+  protected state = toSignal(
     toObservable(this.searchTerm).pipe(
       debounceTime(300),
       distinctUntilChanged(),
       filter((q) => q.trim().length >= 2),
-      switchMap((q) => this.trackService.search(q)),
+      switchMap((q) =>
+        this.trackService.search(q).pipe(
+          map((results): SearchState => ({ status: 'loaded', results })),
+          catchError((error) => of<SearchState>({ status: 'error', error })),
+          startWith({ status: 'loading' } as SearchState),
+        ),
+      ),
     ),
-    { initialValue: [] },
+    { initialValue: { status: 'idle' } as SearchState },
   );
 }
