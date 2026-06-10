@@ -10,7 +10,7 @@
   <h2>{{ isEditMode() ? 'Modifier le morceau' : 'Ajouter un morceau' }}</h2>
 
   @if (serverError()) {
-    <div class="duplicate-error">
+    <div class="duplicate-error" role="alert">
       ⚠ {{ serverError() }}
     </div>
   }

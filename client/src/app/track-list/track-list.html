@@ -3,6 +3,7 @@
   <span class="search-icon">🔍</span>
   <input
     type="search"
+    aria-label="Rechercher un morceau"
     placeholder="Rechercher un titre, artiste, album…"
     [value]="searchTerm()"
     (input)="searchTerm.set($any($event.target).value)" />
@@ -13,7 +14,7 @@
     <p class="hint">Chargement…</p>
   }
   @case ('error') {
-    <div class="error-state">⚠ Erreur lors du chargement. Veuillez réessayer.</div>
+    <div class="error-state" role="alert">⚠ Erreur lors du chargement. Veuillez réessayer.</div>
   }
   @case ('loaded') {
     <section class="grid">

@@ -3,7 +3,7 @@
     <h2>🔐 Connexion</h2>
 
     @if (error()) {
-      <div class="error-banner">{{ error() }}</div>
+      <div class="error-banner" role="alert">{{ error() }}</div>
     }
 
     <div class="field">
@@ -11,10 +11,15 @@
       <input
         id="email"
         type="email"
+        autocomplete="email"
         placeholder="demo&#64;ipssi.fr"
         [value]="email()"
-        (input)="email.set($any($event.target).value)" />
-      @if (emailInvalid()) {
+        [attr.aria-invalid]="(emailTouched() && !email().trim()) || emailInvalid()"
+        (input)="email.set($any($event.target).value)"
+        (blur)="emailTouched.set(true)" />
+      @if (emailTouched() && !email().trim()) {
+        <small class="error">L'email est requis.</small>
+      } @else if (emailInvalid()) {
         <small class="error">Format d'email invalide.</small>
       }
     </div>
@@ -24,9 +29,15 @@
       <input
         id="password"
         type="password"
+        autocomplete="current-password"
         placeholder="••••••••"
         [value]="password()"
-        (input)="password.set($any($event.target).value)" />
+        [attr.aria-invalid]="passwordTouched() && !password()"
+        (input)="password.set($any($event.target).value)"
+        (blur)="passwordTouched.set(true)" />
+      @if (passwordTouched() && !password()) {
+        <small class="error">Le mot de passe est requis.</small>
+      }
     </div>
 
     <button type="submit" [disabled]="loading() || !email() || !password() || emailInvalid()">

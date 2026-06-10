@@ -5,6 +5,7 @@
   <span class="search-icon">🔍</span>
   <input
     type="search"
+    aria-label="Rechercher un morceau"
     placeholder="Rechercher un titre, artiste, album…"
     [value]="searchTerm()"
     (input)="searchTerm.set($any($event.target).value)" />
@@ -18,7 +19,7 @@
     <p class="hint">Recherche en cours…</p>
   }
   @case ('error') {
-    <div class="error-state">⚠ Erreur lors de la recherche. Veuillez réessayer.</div>
+    <div class="error-state" role="alert">⚠ Erreur lors de la recherche. Veuillez réessayer.</div>
   }
   @case ('loaded') {
     @let results = $any(state()).results;

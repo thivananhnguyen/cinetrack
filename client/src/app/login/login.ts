@@ -19,6 +19,8 @@ export class Login {
   protected password = signal('');
   protected error = signal('');
   protected loading = signal(false);
+  protected emailTouched = signal(false);
+  protected passwordTouched = signal(false);
 
   protected emailInvalid = computed(() => {
     const e = this.email().trim();
