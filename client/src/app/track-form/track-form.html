@@ -1,10 +1,17 @@
 <!-- track-form.html -->
+@if (!auth.isLoggedIn()) {
+  <div class="login-prompt">
+    🔐 <a routerLink="/login">Connectez-vous</a> pour ajouter ou modifier un morceau.
+  </div>
+} @else if (loading()) {
+  <div class="loading">Chargement du morceau…</div>
+} @else {
 <form class="track-form" novalidate (submit)="onSubmit($event)">
-  <h2>Ajouter un morceau</h2>
+  <h2>{{ isEditMode() ? 'Modifier le morceau' : 'Ajouter un morceau' }}</h2>
 
-  @if (duplicateError()) {
+  @if (serverError()) {
     <div class="duplicate-error">
-      ⚠ Ce morceau existe déjà dans la liste !
+      ⚠ {{ serverError() }}
     </div>
   }
 
@@ -29,5 +36,12 @@
     <input id="rating" type="number" [formField]="trackForm.rating" />
   </div>
 
-  <button type="submit" [disabled]="!trackForm().valid()">Enregistrer</button>
+  <button type="submit" [disabled]="!trackForm().valid() || saving()">
+    @if (saving()) {
+      Enregistrement…
+    } @else {
+      {{ isEditMode() ? 'Mettre à jour' : 'Enregistrer' }}
+    }
+  </button>
 </form>
+}

@@ -26,6 +26,19 @@
             @if (t.favorite) {
               <span class="fav-badge">⭐ Favori</span>
             }
+
+            @if (auth.isLoggedIn()) {
+              <div class="actions">
+                <a class="btn edit" [routerLink]="['/tracks', t.id, 'edit']">✏️ Modifier</a>
+                <button class="btn delete" (click)="onDelete()" [disabled]="deleting()">
+                  @if (deleting()) {
+                    Suppression…
+                  } @else {
+                    🗑 Supprimer
+                  }
+                </button>
+              </div>
+            }
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, signal, computed } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { TrackCard } from '../track-card/track-card';
 import { TrackForm } from '../track-form/track-form';
 import { TrackService } from '../services/track';
@@ -15,11 +14,13 @@ import { Track } from '../models/track';
 export class TrackList {
   private trackService = inject(TrackService);
 
-  protected tracks = toSignal(this.trackService.getTracks(), {
-    initialValue: [] as Track[],
-  });
+  protected tracks = signal<Track[]>([]);
   protected selectedId = signal<number | null>(null);
   protected searchTerm = signal('');
+
+  constructor() {
+    this.loadTracks();
+  }
 
   protected filteredTracks = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
@@ -30,4 +31,8 @@ export class TrackList {
         t.artist.toLowerCase().includes(term),
     );
   });
+
+  loadTracks() {
+    this.trackService.getTracks().subscribe((data) => this.tracks.set(data));
+  }
 }
