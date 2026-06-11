@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, computed, effect, inject, input, numberAttribute, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { form, FormField, required, min, max, pattern, minLength, maxLength } from '@angular/forms/signals';
+import { catchError, finalize, of, switchMap } from 'rxjs';
 import { Track } from '../models/track';
 import { TrackService } from '../services/track';
 import { AuthService } from '../services/auth';
@@ -15,9 +17,15 @@ const SAFE_TEXT = /^[\p{L}\p{N}\s'\-&.,:!?]+$/u;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackForm {
-  trackId = input<number>();
+  trackId = input<number | undefined>(undefined, {
+    transform: (value) =>
+      value === undefined || value === null || value === ''
+        ? undefined
+        : numberAttribute(value),
+  });
 
   private trackService = inject(TrackService);
+  private destroyRef = inject(DestroyRef);
   private router = inject(Router);
   protected auth = inject(AuthService);
 
@@ -27,21 +35,28 @@ export class TrackForm {
   protected loading = signal(false);
   protected model = signal({ title: '', artist: '', rating: 5 });
 
+  private trackToEdit = toSignal(
+    toObservable(this.trackId).pipe(
+      switchMap((id) => {
+        if (!id) return of<Track | null>(null);
+        this.loading.set(true);
+        return this.trackService.getTrack(id).pipe(
+          catchError(() => {
+            this.serverError.set('Impossible de charger le morceau.');
+            return of<Track | null>(null);
+          }),
+          finalize(() => this.loading.set(false)),
+        );
+      }),
+    ),
+    { initialValue: null },
+  );
+
   constructor() {
     effect(() => {
-      const id = this.trackId();
-      if (!id) return;
-      this.loading.set(true);
-      this.trackService.getTrack(id).subscribe({
-        next: (track) => {
-          this.model.set({ title: track.title, artist: track.artist, rating: track.rating });
-          this.loading.set(false);
-        },
-        error: () => {
-          this.serverError.set('Impossible de charger le morceau.');
-          this.loading.set(false);
-        },
-      });
+      const track = this.trackToEdit();
+      if (!track) return;
+      this.model.set({ title: track.title, artist: track.artist, rating: track.rating });
     });
   }
 
@@ -72,17 +87,20 @@ export class TrackForm {
     const id = this.trackId();
 
     if (id) {
-      this.trackService.update(id, { title, artist, rating: data.rating }).subscribe({
-        next: () => this.router.navigate(['/tracks', id]),
-        error: (err) => {
-          this.saving.set(false);
-          this.serverError.set(
-            err.status === 401
-              ? 'Veuillez vous connecter pour modifier.'
-              : 'Erreur lors de la modification.',
-          );
-        },
-      });
+      this.trackService
+        .update(id, { title, artist, rating: data.rating })
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => this.router.navigate(['/tracks', id]),
+          error: (err) => {
+            this.saving.set(false);
+            this.serverError.set(
+              err.status === 401
+                ? 'Veuillez vous connecter pour modifier.'
+                : 'Erreur lors de la modification.',
+            );
+          },
+        });
     } else {
       const payload: Omit<Track, 'id'> = {
         title,
@@ -96,17 +114,20 @@ export class TrackForm {
         coverUrl: `https://picsum.photos/seed/${Date.now()}/300`,
       };
 
-      this.trackService.create(payload).subscribe({
-        next: () => this.router.navigate(['/']),
-        error: (err) => {
-          this.saving.set(false);
-          this.serverError.set(
-            err.status === 401
-              ? 'Veuillez vous connecter pour ajouter un morceau.'
-              : 'Erreur lors de la création. Veuillez réessayer.',
-          );
-        },
-      });
+      this.trackService
+        .create(payload)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: () => this.router.navigate(['/']),
+          error: (err) => {
+            this.saving.set(false);
+            this.serverError.set(
+              err.status === 401
+                ? 'Veuillez vous connecter pour ajouter un morceau.'
+                : 'Erreur lors de la création. Veuillez réessayer.',
+            );
+          },
+        });
     }
   }
 }

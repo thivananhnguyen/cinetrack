@@ -34,10 +34,10 @@ export class TrackList {
         return req.pipe(
           map((tracks): ListState => ({ status: 'loaded', tracks })),
           catchError((error) => of<ListState>({ status: 'error', error })),
-          startWith({ status: 'loading' } as ListState),
+          startWith({ status: 'loading' } satisfies ListState),
         );
       }),
     ),
-    { initialValue: { status: 'loading' } as ListState },
+    { initialValue: { status: 'loading' } satisfies ListState },
   );
 }

@@ -46,10 +46,16 @@ export class Login {
         this.loading.set(false);
         this.router.navigate(['/']);
       },
-      error: () => {
-        this.loading.set(false);
+      error: (err) => {
+      this.loading.set(false);
+      if (err.status === 429) {
+        this.error.set('Trop de requêtes, veuillez réessayer dans un instant.');
+      } else if (err.status === 0) {
+        this.error.set('Serveur injoignable. Veuillez réessayer plus tard.');
+      } else {
         this.error.set('Email ou mot de passe incorrect.');
-      },
+      }
+    },
     });
   }
 }

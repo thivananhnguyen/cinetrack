@@ -97,6 +97,12 @@
   border: 1px solid #fbbf24;
 }
 
+.fav-badge.recommended {
+  color: #1e40af;
+  background: #dbeafe;
+  border: 1px solid #93c5fd;
+}
+
 .actions {
   display: flex;
   gap: 0.75rem;
@@ -176,4 +182,62 @@
     height: auto;
     max-width: 320px;
   }
+}
+
+.btn.playlist {
+  color: #065f46;
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+}
+
+.btn.playlist:hover {
+  background: #a7f3d0;
+}
+
+.playlist-dropdown {
+  margin-top: 0.75rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
+  overflow: hidden;
+}
+
+.dropdown-empty {
+  padding: 0.75rem 1rem;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.dropdown-empty a {
+  color: #6366f1;
+  font-weight: 600;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #f1f5f9;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: #334155;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.dropdown-item:disabled {
+  opacity: 0.6;
+  cursor: default;
 }

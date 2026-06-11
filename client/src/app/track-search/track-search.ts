@@ -32,10 +32,10 @@ export class TrackSearch {
         this.trackService.search(q).pipe(
           map((results): SearchState => ({ status: 'loaded', results })),
           catchError((error) => of<SearchState>({ status: 'error', error })),
-          startWith({ status: 'loading' } as SearchState),
+          startWith({ status: 'loading' } satisfies SearchState),
         ),
       ),
     ),
-    { initialValue: { status: 'idle' } as SearchState },
+    { initialValue: { status: 'idle' } satisfies SearchState },
   );
 }

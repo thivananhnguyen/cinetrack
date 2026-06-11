@@ -16,21 +16,23 @@
             <p class="genre">{{ t.genre }}</p>
             <p class="duration">Durée : {{ t.durationSeconds | durationFormat }}</p>
 
-            <div class="rating">
+            <div class="rating" role="img" [attr.aria-label]="'Note : ' + t.rating + ' sur 10'">
               @for (star of [1,2,3,4,5,6,7,8,9,10]; track star) {
-                <span [class.filled]="star <= t.rating">★</span>
+                <span [class.filled]="star <= t.rating" aria-hidden="true">★</span>
               }
               <span class="rating-value">{{ t.rating }}/10</span>
             </div>
 
-            @if (t.favorite) {
-              <span class="fav-badge">⭐ Favori</span>
+            @if (t.rating >= 9) {
+              <span class="fav-badge">⭐ Coup de cœur</span>
+            } @else if (t.rating >= 7) {
+              <span class="fav-badge recommended">👍 Recommandé</span>
             }
 
             @if (auth.isLoggedIn()) {
               <div class="actions">
                 <a class="btn edit" [routerLink]="['/tracks', t.id, 'edit']">✏️ Modifier</a>
-                <button class="btn delete" (click)="onDelete()" [disabled]="deleting()">
+                <button class="btn delete" (click)="deleteTrack()" [disabled]="deleting()">
                   @if (deleting()) {
                     Suppression…
                   } @else {
@@ -44,12 +46,12 @@
       </div>
     }
     @case ('error') {
-      <div class="error-state">
+      <div class="error-state" role="alert">
         <p>⚠ Impossible de charger ce morceau.</p>
         <a class="back" routerLink="/">← Retour à l'accueil</a>
       </div>
     }
   }
 } @else {
-  <div class="loading">Chargement…</div>
+  <div class="loading" role="status" aria-live="polite">Chargement…</div>
 }

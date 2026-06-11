@@ -1,8 +1,8 @@
 // track-detail.ts
-import { Component, inject, input, signal } from '@angular/core';
-import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { Component, DestroyRef, inject, input, numberAttribute, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { switchMap, map, catchError, of } from 'rxjs';
+import { switchMap, map, catchError, of, startWith } from 'rxjs';
 import { TrackService } from '../services/track';
 import { AuthService } from '../services/auth';
 import { Track } from '../models/track';
@@ -20,7 +20,8 @@ type TrackDetailState =
   styleUrl: './track-detail.css',
 })
 export class TrackDetail {
-  trackId = input.required<number>();
+  trackId = input.required({ transform: numberAttribute });
+  private destroyRef = inject(DestroyRef);
   private service = inject(TrackService);
   private router = inject(Router);
   protected auth = inject(AuthService);
@@ -31,18 +32,23 @@ export class TrackDetail {
       switchMap((id) =>
         this.service.getTrack(id).pipe(
           map((track): TrackDetailState => ({ status: 'loaded', track })),
+          startWith({ status: 'loading' } satisfies TrackDetailState),
           catchError((error) => of<TrackDetailState>({ status: 'error', error })),
         ),
       ),
     ),
+    { initialValue: { status: 'loading' } satisfies TrackDetailState },
   );
 
-  onDelete() {
+  protected deleteTrack() {
     if (!confirm('Supprimer ce morceau ?')) return;
     this.deleting.set(true);
-    this.service.remove(this.trackId()).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: () => this.deleting.set(false),
-    });
+    this.service
+      .remove(this.trackId())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => this.router.navigate(['/']),
+        error: () => this.deleting.set(false),
+      });
   }
 }
