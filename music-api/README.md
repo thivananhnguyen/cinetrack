@@ -67,6 +67,14 @@ Le token est renvoyé dans `accessToken` ; il doit être envoyé dans l'en-tête
 | `PUT` / `PATCH` | `/tracks/:id` | ✅ | Modification |
 | `DELETE` | `/tracks/:id` | ✅ | Suppression |
 
+### Favorites
+
+| Méthode | Route | Auth | Description |
+|---------|-------|------|-------------|
+| `GET` | `/favorites` | — | Liste des morceaux favoris |
+| `POST` | `/favorites/:trackId` | ✅ | Ajoute le morceau aux favoris |
+| `DELETE` | `/favorites/:trackId` | ✅ | Retire le morceau des favoris |
+
 ### Playlists (limitées à l'utilisateur connecté)
 
 | Méthode | Route | Auth | Description |

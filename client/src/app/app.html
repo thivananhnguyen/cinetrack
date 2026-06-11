@@ -2,9 +2,12 @@
   <h1><a routerLink="/">🎵 CinéTrack</a></h1>
   <p class="subtitle">Your music collection</p>
   <nav class="nav" aria-label="Navigation principale">
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">🏠 Catalogue</a>
+    <a routerLink="/tracks" routerLinkActive="active">🏠 Catalogue</a>
     @if (auth.isLoggedIn()) {
       <a routerLink="/tracks/new" routerLinkActive="active">➕ Ajouter</a>
+      @if (favoritesEnabled) {
+        <a routerLink="/favorites" routerLinkActive="active">⭐ Favoris</a>
+      }
       <span class="user-info">Connecté{{ auth.user()?.name ? ' · ' + auth.user()?.name : '' }}</span>
       <button class="nav-btn logout" (click)="auth.logout()">🚪 Déconnexion</button>
     } @else {

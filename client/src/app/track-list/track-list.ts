@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { debounceTime, distinctUntilChanged, switchMap, map, catchError, of, startWith } from 'rxjs';
 import { TrackCard } from '../track-card/track-card';
 import { TrackService } from '../services/track';
 import { Track } from '../models/track';
+import { AuthService } from '../services/auth';
 
 type ListState =
   | { status: 'loading' }
@@ -19,15 +20,24 @@ type ListState =
 })
 export class TrackList {
   private trackService = inject(TrackService);
+  protected auth = inject(AuthService);
 
   protected selectedId = signal<number | null>(null);
   protected searchTerm = signal('');
+  protected actionError = signal('');
+  private refreshTick = signal(0);
+
+  private queryState = computed(() => ({
+    query: this.searchTerm(),
+    tick: this.refreshTick(),
+  }));
 
   protected state = toSignal(
-    toObservable(this.searchTerm).pipe(
+    toObservable(this.queryState).pipe(
       debounceTime(300),
       distinctUntilChanged(),
-      switchMap((q) => {
+      switchMap(({ query }) => {
+        const q = query;
         const req = q.trim().length >= 2
           ? this.trackService.search(q)
           : this.trackService.getTracks();
@@ -40,4 +50,18 @@ export class TrackList {
     ),
     { initialValue: { status: 'loading' } satisfies ListState },
   );
+
+  protected toggleFavorite(track: Track): void {
+    if (!this.auth.isLoggedIn()) return;
+    this.actionError.set('');
+
+    const request$ = track.favorite
+      ? this.trackService.removeFavorite(track.id).pipe(map(() => null))
+      : this.trackService.addFavorite(track.id).pipe(map(() => null));
+
+    request$.subscribe({
+      next: () => this.refreshTick.update((v) => v + 1),
+      error: () => this.actionError.set('Impossible de mettre à jour le favori.'),
+    });
+  }
 }

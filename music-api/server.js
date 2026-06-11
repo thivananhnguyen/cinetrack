@@ -8,19 +8,13 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 
-require('dotenv').config();
-
 const { db, init } = require('./src/db');
 const { signToken, authRequired } = require('./src/auth');
 
 init();
 
 const app = express();
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
 app.use(express.json());
 
 // Optional artificial latency to practice "loading" states: API_DELAY=500 npm start
@@ -171,6 +165,24 @@ app.delete('/tracks/:id', authRequired, (req, res) => {
   if (result.changes === 0) return res.status(404).json({ message: 'Track not found' });
   return res.status(204).send();
 });
+
+// --- Favorites (protected writes, simple track flag) -----------------------
+app.get('/favorites', (req, res) => {
+  const rows = db.prepare('SELECT * FROM tracks WHERE favorite = 1 ORDER BY id').all();
+  return res.json(rows.map(mapTrack));
+});
+
+function setFavorite(req, res, favorite) {
+  const existing = db.prepare('SELECT * FROM tracks WHERE id = ?').get(req.params.trackId);
+  if (!existing) return res.status(404).json({ message: 'Track not found' });
+
+  db.prepare('UPDATE tracks SET favorite = ? WHERE id = ?').run(favorite ? 1 : 0, existing.id);
+  const updated = db.prepare('SELECT * FROM tracks WHERE id = ?').get(existing.id);
+  return res.json(mapTrack(updated));
+}
+
+app.post('/favorites/:trackId', authRequired, (req, res) => setFavorite(req, res, true));
+app.delete('/favorites/:trackId', authRequired, (req, res) => setFavorite(req, res, false));
 
 // --- Playlists (all protected, scoped to the logged-in user) ---------------
 app.get('/playlists', authRequired, (req, res) => {

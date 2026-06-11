@@ -1,0 +1,23 @@
+<h2>⭐ Mes favoris</h2>
+
+@if (actionError()) {
+  <p class="hint" role="alert">{{ actionError() }}</p>
+}
+
+@switch (state().status) {
+  @case ('loading') {
+    <p class="hint" role="status" aria-live="polite">Chargement…</p>
+  }
+  @case ('error') {
+    <div class="error-state" role="alert">⚠ Impossible de charger les favoris.</div>
+  }
+  @case ('loaded') {
+    <section class="grid" aria-label="Liste des morceaux favoris">
+      @for (track of $any(state()).tracks; track track.id) {
+        <app-track-card [track]="track" [favoriteActionEnabled]="true" (toggleFavorite)="toggleFavorite(track)" />
+      } @empty {
+        <p class="empty">Aucun morceau favori pour le moment.</p>
+      }
+    </section>
+  }
+}

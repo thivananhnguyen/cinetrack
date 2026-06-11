@@ -9,6 +9,10 @@
     (input)="searchTerm.set($any($event.target).value)" />
 </div>
 
+@if (actionError()) {
+  <p class="hint" role="alert">{{ actionError() }}</p>
+}
+
 @switch (state().status) {
   @case ('loading') {
     <p class="hint">Chargement…</p>
@@ -22,7 +26,9 @@
         <app-track-card
         [track]="track"
         [active]="track.id === selectedId()"
-        (select)="selectedId.set($event.id)" />
+        [favoriteActionEnabled]="auth.isLoggedIn()"
+        (select)="selectedId.set($event.id)"
+        (toggleFavorite)="toggleFavorite(track)" />
       } @empty {
         <p class="empty">Aucun résultat pour « {{ searchTerm() }} ».</p>
       }

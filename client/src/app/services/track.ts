@@ -32,4 +32,16 @@ export class TrackService {
   remove(id: number) {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
   }
+
+  getFavorites() {
+    return this.http.get<Track[]>(`${environment.apiUrl}/favorites`);
+  }
+
+  addFavorite(trackId: number) {
+    return this.http.post<Track>(`${environment.apiUrl}/favorites/${trackId}`, {});
+  }
+
+  removeFavorite(trackId: number) {
+    return this.http.delete<void>(`${environment.apiUrl}/favorites/${trackId}`);
+  }
 }

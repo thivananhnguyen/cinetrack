@@ -1,10 +1,23 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { App } from './app';
+import { AuthService } from './services/auth';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [
+        provideRouter([]),
+        {
+          provide: AuthService,
+          useValue: {
+            isLoggedIn: () => false,
+            user: () => null,
+            logout: () => undefined,
+          },
+        },
+      ],
     }).compileComponents();
   });
 
@@ -18,6 +31,6 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, cinetrack');
+    expect(compiled.querySelector('h1')?.textContent).toContain('CinéTrack');
   });
 });

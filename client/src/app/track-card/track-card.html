@@ -2,7 +2,6 @@
 <article
   class="card"
   [class.active]="active()"
-  [routerLink]="['/tracks', track().id]"
   [appHighlightFavorite]="active() ? (track().favorite ? 'favorite' : (track().rating >= 7 ? 'recommended' : 'none')) : 'none'">
   <img [src]="track().coverUrl" [alt]="track().title" />
   <h3>{{ track().title }}</h3>
@@ -13,6 +12,20 @@
     @case (track().rating >= 7) { <span class="badge blue">👍 Recommandé</span> }
     @default { <span class="badge muted">À découvrir</span> }
   }
+  <div class="actions">
+    <a class="btn-view" [routerLink]="['/tracks', track().id]">Voir</a>
+    @if (favoritesEnabled) {
+      <button
+        type="button"
+        class="btn-favorite"
+        [class.active]="track().favorite"
+        [disabled]="!favoriteActionEnabled()"
+        [attr.aria-label]="track().favorite ? 'Retirer des favoris' : 'Ajouter aux favoris'"
+        (click)="onToggleFavorite($event)">
+        ★ Favori
+      </button>
+    }
+  </div>
   @if (active()) {
     <span class="badge playing">▶ En lecture</span>
   }

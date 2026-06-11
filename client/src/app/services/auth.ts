@@ -3,17 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-
-export interface AuthUser {
-  id: number;
-  email: string;
-  name: string;
-}
-
-interface LoginResponse {
-  accessToken: string;
-  user: AuthUser;
-}
+import { AuthUser, LoginResponse } from '../models/auth';
 
 const TOKEN_KEY = 'cinetrack.accessToken';
 
